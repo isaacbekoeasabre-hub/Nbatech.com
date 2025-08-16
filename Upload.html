@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Same head content as index.html -->
+    <title>TechMaster Pro - Upload Content</title>
+</head>
+<body>
+    <!-- Same header as index.html -->
+    
+    <main class="main-content">
+        <section class="page-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Upload Your Content</h2>
+                    <p>Share your knowledge with our community by uploading tutorial videos</p>
+                </div>
+                
+                <div class="upload-section">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Drag & Drop Your Video Files Here</h3>
+                        <p>or click to browse your files (MP4, WebM, MOV - Max 500MB)</p>
+                        <input type="file" id="fileInput" accept="video/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="videoTitle">Video Title</label>
+                        <input type="text" id="videoTitle" placeholder="Enter video title">
+                    </div>
+                    <div class="form-group">
+                        <label for="videoDescription">Description</label>
+                        <textarea id="videoDescription" placeholder="Enter video description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="videoCategory">Category</label>
+                        <select id="videoCategory">
+                            <option value="">Select a category</option>
+                            <option value="html-css">HTML & CSS</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <button class="btn upload-btn" id="uploadBtn">Upload Video</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Same footer and chatbot as index.html -->
+    
+    <script>
+        // Upload functionality
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        ['dragover', 'dragenter'].forEach(event => {
+            uploadArea.addEventListener(event, (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('active');
+            });
+        });
+        
+        ['dragleave', 'dragend'].forEach(event => {
+            uploadArea.addEventListener(event, () => {
+                uploadArea.classList.remove('active');
+            });
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('active');
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileSelection();
+            }
+        });
+        
+        fileInput.addEventListener('change', handleFileSelection);
+        
+        function handleFileSelection() {
+            const file = fileInput.files[0];
+            if (file) {
+                uploadArea.innerHTML = `
+                    <div class="upload-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>${file.name}</h3>
+                    <p>${(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+                `;
+            }
+        }
+        
+        uploadBtn.addEventListener('click', () => {
+            const title = document.getElementById('videoTitle').value;
+            const description = document.getElementById('videoDescription').value;
+            const category = document.getElementById('videoCategory').value;
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a video file to upload');
+                return;
+            }
+            
+            if (!title) {
+                alert('Please enter a video title');
+                return;
+            }
+            
+            // Here you would typically upload to a server
+            alert(`Uploading "${title}"... (This is a demo)`);
+        });
+    </script>
+</body>
+</html>
